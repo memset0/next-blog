@@ -1,3 +1,9 @@
+/*
+  lib/posts.ts
+
+  本文件用于处理单个 Markdown 文件的相关数据，特别是 FrontMatter 中的数据，并将其转化为 fields 的形式。
+*/
+
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
