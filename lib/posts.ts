@@ -4,11 +4,11 @@
   本文件用于处理单个 Markdown 文件的相关数据，特别是 FrontMatter 中的数据，并将其转化为 fields 的形式。
 */
 
-import fs from 'fs';
-import path from 'path';
-import matter from 'gray-matter';
-import { remark } from 'remark';
-import html from 'remark-html';
+import fs from "fs";
+import path from "path";
+import matter from "gray-matter";
+import { remark } from "remark";
+import html from "remark-html";
 
 // 1. 定义数据结构类型
 
@@ -38,8 +38,7 @@ export type PostWithContent = Post & {
   contentHtml: string;
 };
 
-
-const postsDirectory = path.join(process.cwd(), 'content');
+const postsDirectory = path.join(process.cwd(), "content");
 
 /**
  * 中间件函数：处理和增强从 front-matter 解析出的数据
@@ -70,11 +69,11 @@ function enrichPostData(id: string, matterResult: matter.GrayMatterFile<string>)
 
 export function getSortedPostsData(): Post[] {
   const fileNames = fs.readdirSync(postsDirectory);
-  const allPostsData = fileNames.map((fileName) => {
-    const id = fileName.replace(/\.md$/, '');
+  const allPostsData = fileNames.map(fileName => {
+    const id = fileName.replace(/\.md$/, "");
 
     const fullPath = path.join(postsDirectory, fileName);
-    const fileContents = fs.readFileSync(fullPath, 'utf8');
+    const fileContents = fs.readFileSync(fullPath, "utf8");
 
     const matterResult = matter(fileContents);
 
@@ -100,10 +99,10 @@ type PathParams = {
 
 export function getAllPostIds(): PathParams[] {
   const fileNames = fs.readdirSync(postsDirectory);
-  return fileNames.map((fileName) => {
+  return fileNames.map(fileName => {
     return {
       params: {
-        slug: fileName.replace(/\.md$/, ''),
+        slug: fileName.replace(/\.md$/, ""),
       },
     };
   });
@@ -111,15 +110,13 @@ export function getAllPostIds(): PathParams[] {
 
 export async function getPostData(slug: string): Promise<PostWithContent> {
   const fullPath = path.join(postsDirectory, `${slug}.md`);
-  const fileContents = fs.readFileSync(fullPath, 'utf8');
+  const fileContents = fs.readFileSync(fullPath, "utf8");
 
   const matterResult = matter(fileContents);
 
-  const processedContent = await remark()
-    .use(html)
-    .process(matterResult.content);
+  const processedContent = await remark().use(html).process(matterResult.content);
   const contentHtml = processedContent.toString();
-  
+
   const enrichedData = enrichPostData(slug, matterResult);
 
   return {

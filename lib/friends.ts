@@ -1,4 +1,4 @@
-import yaml from 'yaml';
+import yaml from "yaml";
 
 export interface Friend {
   name: string;
@@ -16,24 +16,24 @@ export function loadFriendsFromYaml(plainYaml: string): Friend[] {
   const friends: Friend[] = [];
   for (const el of data) {
     const friend: Partial<Friend> = {};
-    if (el.name && typeof el.name === 'string') {
+    if (el.name && typeof el.name === "string") {
       friend.name = el.name;
     }
-    if (el.avatar && typeof el.avatar === 'string') {
+    if (el.avatar && typeof el.avatar === "string") {
       friend.avatar = el.avatar;
-    } else if (el.avatar_url && typeof el.avatar_url === 'string') {
+    } else if (el.avatar_url && typeof el.avatar_url === "string") {
       friend.avatar = el.avatar_url;
     }
-    if (el.bio && typeof el.bio === 'string') {
+    if (el.bio && typeof el.bio === "string") {
       friend.bio = el.bio;
     }
-    if (el.link && typeof el.link === 'string') {
+    if (el.link && typeof el.link === "string") {
       friend.link = el.link;
     }
-    if (el.hide && typeof el.hide === 'boolean') {
+    if (el.hide && typeof el.hide === "boolean") {
       friend.hide = el.hide;
     }
-    friends.push(friend);
+    friends.push(friend as any as Friend);
   }
 
   return friends;

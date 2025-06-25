@@ -1,16 +1,15 @@
-import Head from 'next/head';
-import Link from 'next/link';
+import type { GetStaticProps, InferGetStaticPropsType } from "next";
+import type { Post } from "@/lib/posts";
 
-import type { GetStaticProps, InferGetStaticPropsType } from 'next';
-import { Card, CardBody, CardHeader } from '@heroui/card';
-import { Divider } from '@heroui/divider';
-import { Spacer } from '@heroui/spacer';
-import { Chip } from '@heroui/chip';
+import Head from "next/head";
+import Link from "next/link";
+import { Card, CardBody, CardHeader } from "@heroui/card";
+import { Divider } from "@heroui/divider";
+import { Spacer } from "@heroui/spacer";
+import { Chip } from "@heroui/chip";
 
-import { getSortedPostsData } from '@/lib/posts';
-import type { Post } from '@/lib/posts';
-
-import { title, subtitle } from '@/components/primitives';
+import { getSortedPostsData } from "@/lib/posts";
+import { title, subtitle } from "@/components/primitives";
 
 // 使用 GetStaticProps 类型来定义 getStaticProps 函数
 export const getStaticProps: GetStaticProps<{ allPostsData: Post[] }> = async () => {
@@ -35,9 +34,11 @@ export default function Home({ allPostsData }: Props) {
 
       <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
         <div className="inline-block max-w-lg text-center justify-center">
-          <h1 className={title({ color: 'violet' })}>我的静态博客</h1>
+          <h1 className={title({ color: "violet" })}>我的静态博客</h1>
           <Spacer y={4} />
-          <h2 className={subtitle({ class: 'mt-4' })}>欢迎来到我的技术分享空间，在这里记录学习和思考的点点滴滴。</h2>
+          <h2 className={subtitle({ class: "mt-4" })}>
+            欢迎来到我的技术分享空间，在这里记录学习和思考的点点滴滴。
+          </h2>
         </div>
       </section>
 
@@ -51,10 +52,13 @@ export default function Home({ allPostsData }: Props) {
 
         <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-1">
           {allPostsData.map(({ id, title: postTitle, author, fields }) => (
-            <Card key={id} className="hover:shadow-lg transition-shadow duration-300" isPressable>
+            <Card key={id} isPressable className="hover:shadow-lg transition-shadow duration-300">
               <CardHeader className="pb-0 pt-4 px-6">
                 <div className="flex flex-col w-full">
-                  <Link href={fields.path} className="text-xl font-semibold text-foreground hover:text-primary transition-colors">
+                  <Link
+                    href={fields.path}
+                    className="text-xl font-semibold text-foreground hover:text-primary transition-colors"
+                  >
                     {postTitle}
                   </Link>
                   <Spacer y={2} />
