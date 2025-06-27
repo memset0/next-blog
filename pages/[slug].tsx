@@ -9,6 +9,7 @@ import type { PostWithContent } from "@/lib/posts";
 import Head from "next/head";
 
 import { getAllPostIds, getPostData } from "@/lib/posts";
+import DefaultLayout from "@/layouts/default";
 
 // 定义 getStaticPaths 的返回类型
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -35,19 +36,28 @@ export const getStaticProps: GetStaticProps<{ postData: PostWithContent }> = asy
 // 再次使用 InferGetStaticPropsType 推断 props 类型
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
 
-export default function Post({ postData }: Props) {
+export default function BlogPost({ postData }: Props) {
+  if (!postData) {
+    return (
+      <DefaultLayout>
+        <div>Post not found</div>
+      </DefaultLayout>
+    );
+  }
+
   return (
-    <div style={{ maxWidth: "768px", margin: "0 auto", padding: "2rem" }}>
+    <DefaultLayout>
       <Head>
         <title>{postData.title}</title>
       </Head>
-      <article>
-        <h1 style={{ fontSize: "2.5rem" }}>{postData.title}</h1>
-        <div style={{ color: "#666", marginBottom: "2rem" }}>
-          {postData.date} by {postData.author}
-        </div>
-        <div dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
+      <article className="max-w-4xl mx-auto">
+        <h1 className="text-4xl font-bold mb-4">{postData.title}</h1>
+        <div className="text-gray-600 mb-8">{postData.date}</div>
+        <div
+          className="prose max-w-none"
+          dangerouslySetInnerHTML={{ __html: postData.contentHtml }}
+        />
       </article>
-    </div>
+    </DefaultLayout>
   );
 }

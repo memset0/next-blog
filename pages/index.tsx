@@ -10,6 +10,7 @@ import { Chip } from "@heroui/chip";
 
 import { getSortedPostsData } from "@/lib/posts";
 import { title, subtitle } from "@/components/primitives";
+import DefaultLayout from "@/layouts/default";
 
 // 使用 GetStaticProps 类型来定义 getStaticProps 函数
 export const getStaticProps: GetStaticProps<{ allPostsData: Post[] }> = async () => {
@@ -26,39 +27,24 @@ type Props = InferGetStaticPropsType<typeof getStaticProps>;
 
 export default function Home({ allPostsData }: Props) {
   return (
-    <div className="max-w-7xl mx-auto px-6 py-8">
-      <Head>
-        <title>我的静态博客</title>
-        <meta name="description" content="一个使用 Next.js 构建的静态博客" />
-      </Head>
-
+    <DefaultLayout>
       <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
         <div className="inline-block max-w-lg text-center justify-center">
-          <h1 className={title({ color: "violet" })}>我的静态博客</h1>
+          {/* <h1 className={title({ color: "violet" })}>我的静态博客</h1>
           <Spacer y={4} />
           <h2 className={subtitle({ class: "mt-4" })}>
             欢迎来到我的技术分享空间，在这里记录学习和思考的点点滴滴。
-          </h2>
+          </h2> */}
         </div>
       </section>
 
-      <Divider className="my-8" />
-
       <main className="max-w-4xl mx-auto">
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold text-foreground mb-2">最新文章</h2>
-          <p className="text-lg text-default-600">探索最新的技术文章和见解</p>
-        </div>
-
         <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-1">
           {allPostsData.map(({ id, title: postTitle, author, fields }) => (
-            <Card key={id} isPressable className="hover:shadow-lg transition-shadow duration-300">
+            <Card key={id} isPressable>
               <CardHeader className="pb-0 pt-4 px-6">
                 <div className="flex flex-col w-full">
-                  <Link
-                    href={fields.path}
-                    className="text-xl font-semibold text-foreground hover:text-primary transition-colors"
-                  >
+                  <Link href={fields.path} className="text-xl font-semibold text-foreground">
                     {postTitle}
                   </Link>
                   <Spacer y={2} />
@@ -87,6 +73,6 @@ export default function Home({ allPostsData }: Props) {
           </Card>
         )}
       </main>
-    </div>
+    </DefaultLayout>
   );
 }
