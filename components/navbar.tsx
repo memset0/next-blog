@@ -103,7 +103,7 @@ export const Navbar = () => {
             <NavbarItem key={item.href}>
               <NextLink
                 className={
-                  "px-3 py-2 text-sm text-foreground/80 transition-colors hover:text-foreground " +
+                  "px-3 py-2 text-sm font-semibold text-foreground/80 transition-colors hover:text-foreground " +
                   clsx(
                     linkStyles({ color: "foreground" }),
                     "data-[active=true]:text-primary data-[active=true]:font-medium"

@@ -24,8 +24,9 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps<{ postData: PostWithContent }> = async (
   context: GetStaticPropsContext
 ) => {
-  const { slug } = context.params as { slug: string };
-  const postData = await getPostData(slug);
+  const { slug } = context.params as { slug: string[] };
+  const slugPath = Array.isArray(slug) ? slug.join("/") : slug;
+  const postData = await getPostData(slugPath);
   return {
     props: {
       postData,
@@ -48,11 +49,11 @@ export default function BlogPost({ postData }: Props) {
   return (
     <DefaultLayout>
       <Head>
-        <title>{postData.title}</title>
+        <title>{postData.fields.title}</title>
       </Head>
       <article className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold mb-4">{postData.title}</h1>
-        <div className="text-gray-600 mb-8">{postData.date}</div>
+        <h1 className="text-4xl font-bold mb-4">{postData.fields.title}</h1>
+        <div className="text-gray-600 mb-8">{postData.fields.createTime}</div>
         <div
           className="prose max-w-none"
           dangerouslySetInnerHTML={{ __html: postData.contentHtml }}
