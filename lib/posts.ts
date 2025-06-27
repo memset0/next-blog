@@ -30,6 +30,8 @@ export type PostFields = {
   title: string;
   publishedTitle: string;
 
+  tags: string[];
+
   createTime: number;
   updateTime: number;
   publishTime: number;
@@ -105,6 +107,18 @@ function enrichPostData(filePath: string, matterResult: matter.GrayMatterFile<st
   const numberOfWords = matterResult.content.split(/\s/g).length;
   const readingTime = Math.ceil(numberOfWords / wordsPerMinute);
 
+  function appendToList(list: string[], item: string | string[] | undefined) {
+    if (!item) {
+      return;
+    } else if (typeof item === "string") {
+      list.push(item);
+    } else if (Array.isArray(item)) {
+      for (const tag of item) {
+        list.push(tag);
+      }
+    }
+  }
+
   // 过滤 frontmatter 中的所有元素，确保全部可序列化（如果是 Date 需要转换成字符串）
   const filteredFrontmatter = Object.fromEntries(
     Object.entries(frontmatter).filter(([key, value]) => {
@@ -115,8 +129,10 @@ function enrichPostData(filePath: string, matterResult: matter.GrayMatterFile<st
     })
   );
 
+  // 关于 title 的处理
   let title = frontmatter.title || "Untitled Post";
 
+  // 关于 publish / index 以及 publishedTitle 的处理
   let publishedTitle: string | null =
     frontmatter.publishedTitle ||
     frontmatter.publishTitle ||
@@ -134,8 +150,12 @@ function enrichPostData(filePath: string, matterResult: matter.GrayMatterFile<st
     indexed = published;
   }
 
-  // 关于 createTime / updateTime / publishTime 的处理
+  // 关于 tags 的提取和处理
+  let tags: string[] = [];
+  appendToList(tags, frontmatter.tag);
+  appendToList(tags, frontmatter.tags);
 
+  // 关于 createTime / updateTime / publishTime 的处理
   let createTime: string | Date | null =
     frontmatter.date ||
     frontmatter.createTime ||
@@ -171,20 +191,17 @@ function enrichPostData(filePath: string, matterResult: matter.GrayMatterFile<st
     frontmatter: {},
     // 创建我们自定义的 fields 对象
     fields: {
-      slug: slug,
+      slug,
       path: `/${slug}/`,
       filePath: filePath,
-
       published,
       indexed,
-
       title,
       publishedTitle,
-
+      tags,
       createTime: convertToTimestamp(createTime),
       updateTime: convertToTimestamp(updateTime),
       publishTime: convertToTimestamp(publishTime),
-
       readingTime: readingTime,
     },
   };
