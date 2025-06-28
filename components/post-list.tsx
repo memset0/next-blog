@@ -16,38 +16,43 @@ export default function PostList({ allPostsData }: PostListProps) {
   return (
     <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-1">
       {allPostsData.map(({ id, fields }) => (
-        <Link key={id} href={fields.path} className="block w-full">
+        <Link key={id} href={fields.path} className="block w-full min-w-0">
           <Card
             isPressable
-            className="transition-all duration-300 hover:scale-[1.02] w-full"
+            className="transition-all duration-300 hover:scale-[1.02] w-full min-w-0"
             classNames={{
               base: "data-[pressed=true]:scale-[0.98] bg-content1 hover:bg-content2",
             }}
           >
-            <div className="flex flex-col md:flex-row">
+            <div className="flex flex-col md:flex-row w-full min-w-0">
               {/* 桌面端左侧，手机端下方：内容区域 */}
               <div
                 className={clsx(
-                  "flex-1 flex flex-col order-2 md:order-1 md:w-3/5",
-                  fields.cover && "md:w-2/5"
+                  "flex flex-col order-2 md:order-1 w-full min-w-0",
+                  fields.cover ? "md:w-3/5" : "md:w-full"
                 )}
               >
                 <CardHeader className="px-4 pb-0 pt-4">
-                  <div className="flex flex-col w-full">
-                    <span className="text-xl font-semibold text-foreground text-left">
+                  <div className="flex flex-col w-full min-w-0">
+                    <div className="text-xl font-semibold text-foreground text-left break-words hyphens-auto">
                       <PostTitleHolder title={fields.publishedTitle} />
-                    </span>
+                    </div>
                     <Spacer y={1} />
-                    <div className="flex items-center gap-4 text-small text-default-500">
-                      <span>创建于 {displayDate(fields.createTime)}</span>
+                    <div className="flex items-center gap-4 text-small text-default-500 flex-wrap">
+                      <span className="whitespace-nowrap">
+                        创建于 {displayDate(fields.createTime)}
+                      </span>
                       {fields.createTime !== fields.updateTime && (
-                        <span>更新于 {displayDate(fields.updateTime)}</span>
+                        <span className="whitespace-nowrap">
+                          更新于 {displayDate(fields.updateTime)}
+                        </span>
                       )}
                     </div>
                   </div>
                 </CardHeader>
                 <CardBody className="px-4 pt-2 flex-1">
                   <div
+                    className="break-words"
                     dangerouslySetInnerHTML={{ __html: fields.description.replace(/> /g, "") }}
                   />
                 </CardBody>
@@ -55,7 +60,7 @@ export default function PostList({ allPostsData }: PostListProps) {
 
               {/* 桌面端右侧，手机端上方：封面图片 */}
               {fields.cover && (
-                <div className="w-full md:w-2/5 order-1 md:order-2">
+                <div className="w-full md:w-2/5 order-1 md:order-2 flex-shrink-0 min-w-0">
                   {/* 手机端：按宽高比自然显示 */}
                   <div className="block md:hidden">
                     <Image
