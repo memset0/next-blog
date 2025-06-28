@@ -34,7 +34,7 @@ export default function Home({ allPostsData }: Props) {
         </div>
       </section>
 
-      <main className="max-w-4xl mx-auto">
+      <main className="max-w-3xl mx-auto">
         <PostList allPostsData={allPostsData.filter(post => post.fields.published)} />
       </main>
     </DefaultLayout>
