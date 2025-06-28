@@ -36,6 +36,8 @@ export type PostFields = {
   updateTime: number;
   publishTime: number;
 
+  cover: string | null;
+
   readingTime: number;
 };
 
@@ -185,6 +187,13 @@ function enrichPostData(filePath: string, matterResult: matter.GrayMatterFile<st
     }
   }
 
+  // 关于 cover 的处理
+  // 这里采取临时方案，所有图片仍然是从网络加载的
+  let cover: string | null = null;
+  if (frontmatter.cover && frontmatter.cover.startsWith("https://")) {
+    cover = frontmatter.cover;
+  }
+
   return {
     // 将原始的 front-matter 数据展开，确保 date 是字符串
     id: slug,
@@ -202,6 +211,7 @@ function enrichPostData(filePath: string, matterResult: matter.GrayMatterFile<st
       createTime: convertToTimestamp(createTime),
       updateTime: convertToTimestamp(updateTime),
       publishTime: convertToTimestamp(publishTime),
+      cover,
       readingTime: readingTime,
     },
   };

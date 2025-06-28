@@ -27,7 +27,7 @@ export default function Home({ allPostsData }: Props) {
       <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
         <div className="inline-block max-w-lg text-center justify-center">
           {/* <h1 className={title({ color: "violet" })}>我的静态博客</h1>
-                    <Spacer y={4} />
+          <Spacer y={4} />
           <h2 className={subtitle({ class: "mt-4" })}>
             欢迎来到我的技术分享空间，在这里记录学习和思考的点点滴滴。
           </h2> */}

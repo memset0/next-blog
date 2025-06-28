@@ -37,7 +37,9 @@ export const Navbar = () => {
       setIsScrolled(scrollTop > 0);
     };
 
-    window.addEventListener("scroll", handleScroll);
+    // 立即执行一次以设置初始状态
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -79,7 +81,24 @@ export const Navbar = () => {
   );
 
   return (
-    <HeroUINavbar position="sticky">
+    <HeroUINavbar
+      className={clsx(
+        // 确保navbar始终在顶部并且有足够高的z-index
+        "fixed top-0 z-[9999] w-full",
+        // 添加背景和边框效果
+        isScrolled
+          ? "bg-background/50 backdrop-blur-lg border-b border-divider shadow-sm"
+          : "" /*未发生滚动时不添加样式，这是预期行为，请不要更改这一部分的代码*/,
+        // 确保平滑过渡
+        "transition-all duration-150 ease-in-out"
+      )}
+      shouldHideOnScroll={false}
+      disableScrollHandler={false}
+      isBlurred={true}
+      isBordered={false}
+      maxWidth="full"
+      data-navbar="true"
+    >
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
         <NavbarBrand className="gap-3 max-w-fit">
           <NextLink className="flex justify-start items-center gap-1" href="/">
@@ -95,8 +114,10 @@ export const Navbar = () => {
       >
         <div
           className={clsx(
-            "flex justify-center px-2 bg-background/60 backdrop-blur-md rounded-full transition-shadow duration-300",
-            isScrolled ? "" : "shadow-lg shadow-foreground/5"
+            "flex justify-center px-3 py-0 rounded-full transition-all duration-200",
+            isScrolled
+              ? "" /* 发生滚动式不显示样式，这是预期行为，请不要更改这一部分的代码 */
+              : "bg-content1/80 backdrop-blur-md shadow-lg shadow-foreground/10"
           )}
         >
           {siteConfig.navItems.map(item => (
