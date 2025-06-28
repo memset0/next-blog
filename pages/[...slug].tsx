@@ -10,6 +10,7 @@ import Head from "next/head";
 
 import { getAllPostIds, getPostData } from "@/lib/posts";
 import DefaultLayout from "@/layouts/default";
+import { Typography } from "@/components/typography";
 
 // 定义 getStaticPaths 的返回类型
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -54,10 +55,9 @@ export default function BlogPost({ postData }: Props) {
       <article className="max-w-4xl mx-auto">
         <h1 className="text-4xl font-bold mb-4">{postData.fields.title}</h1>
         <div className="text-gray-600 mb-8">{postData.fields.createTime}</div>
-        <div
-          className="prose max-w-none"
-          dangerouslySetInnerHTML={{ __html: postData.contentHtml }}
-        />
+        <div className="prose max-w-none">
+          <Typography html={postData.contentHtml} />
+        </div>
       </article>
     </DefaultLayout>
   );

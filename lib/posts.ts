@@ -7,8 +7,7 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
-import { remark } from "remark";
-import html from "remark-html";
+import { renderMarkdown } from "./markdown";
 
 // 1. 定义数据结构类型
 
@@ -315,8 +314,7 @@ export async function getPostData(slug: string): Promise<PostWithContent> {
 
   const matterResult = matter(fileContents);
 
-  const processedContent = await remark().use(html).process(matterResult.content);
-  const contentHtml = processedContent.toString();
+  const contentHtml = await renderMarkdown(matterResult.content);
 
   const enrichedData = enrichPostData(filePath, matterResult);
 

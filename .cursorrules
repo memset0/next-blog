@@ -1,6 +1,10 @@
 == 项目介绍
 
-这是一个个人博客项目，使用 Next.js + Hero UI + Tailwind CSS 框架开发，使用了包括但不限于 pnpm + TypeScript + Prettier + ES Lint 等工具进行维护。
+这是一个个人博客项目，使用 Next.js + Hero UI + Tailwind CSS 框架开发，使用了包括但不限于 vitest + remark + pnpm + TypeScript + Prettier + ES Lint 等工具进行维护。
+
+== 注意事项
+
+- 必要时，请使用 vitest 进行单元测试，现在的单元测试主要涵盖 markdown 渲染相关模块。
 
 == 要求
 
