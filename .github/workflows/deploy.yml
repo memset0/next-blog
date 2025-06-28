@@ -67,7 +67,7 @@ jobs:
         env:
           API_TOKEN_GITHUB: ${{ secrets.GH_TOKEN }}
         with:
-          source-directory: ./build
+          source-directory: ./.next/server/pages
           destination-github-username: memset0
           destination-repository-name: next-blog-deployment
           target-branch: master
@@ -85,7 +85,7 @@ jobs:
       # - name: Upload artifact
       #   uses: actions/upload-pages-artifact@v3
       #   with:
-      #     path: ./build
+      #     path: ./.next/server/pages
 
   # pages:
   #   name: Deploy with Github Pages
