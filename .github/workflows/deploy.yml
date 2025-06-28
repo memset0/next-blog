@@ -29,8 +29,12 @@ defaults:
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Build with Gatsby
+    name: Build with Next.js
     steps:
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -51,10 +55,6 @@ jobs:
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v2
-        # with:
-        #   # Automatically inject pathPrefix in your Gatsby configuration file.
-        #   # You may remove this line if you want to manage the configuration yourself.
-        #   static_site_generator: gatsby
 
       - name: Install dependencies
         run: pnpm install
