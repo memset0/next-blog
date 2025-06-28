@@ -88,7 +88,7 @@ export const Navbar = () => {
         "transition-all duration-150 ease-in-out",
         // 添加背景和边框效果
         isScrolled
-          ? "bg-background/50 backdrop-blur-lg border-b border-divider shadow-sm"
+          ? "bg-background/80 backdrop-blur-lg border-b border-divider shadow-sm"
           : "" /*未发生滚动时不添加样式，这是预期行为，请不要更改这一部分的代码*/
       )}
       shouldHideOnScroll={false}
