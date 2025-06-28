@@ -35,7 +35,7 @@ export default function PostList({ allPostsData }: PostListProps) {
                 <CardHeader className="px-4 pb-0 pt-4">
                   <div className="flex flex-col w-full">
                     <span className="text-xl font-semibold text-foreground text-left">
-                      <PostTitleHolder title={fields.title} />
+                      <PostTitleHolder title={fields.publishedTitle} />
                     </span>
                     <Spacer y={1} />
                     <div className="flex items-center gap-4 text-small text-default-500">
