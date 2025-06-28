@@ -133,6 +133,9 @@ function enrichPostData(filePath: string, matterResult: matter.GrayMatterFile<st
     })
   );
 
+  let hasPublishedTitle = false;
+  let hasCreateTime = false;
+
   // 关于 title 的处理
   let title = frontmatter.title || "Untitled Post";
 
@@ -144,23 +147,16 @@ function enrichPostData(filePath: string, matterResult: matter.GrayMatterFile<st
   } else {
     description = matterResult.content.slice(0, 200);
   }
-
-  // 关于 publish / index 以及 publishedTitle 的处理
   let publishedTitle: string | null =
     frontmatter.publishedTitle ||
     frontmatter.publishTitle ||
     frontmatter["published-title"] ||
     frontmatter["publish-title"] ||
     null;
-  let published = !!frontmatter.publish || !!frontmatter.published || false;
-  let indexed = !!frontmatter.index || !!frontmatter.indexed || false;
   if (publishedTitle !== null) {
-    published = true; // 如果有设置 publishedTitle 则自动发布
+    hasPublishedTitle = true; // 如果有设置 publishedTitle 则自动发布
   } else {
     publishedTitle = title;
-  }
-  if (!indexed && published) {
-    indexed = published;
   }
 
   // 关于 tags 的提取和处理
@@ -190,6 +186,7 @@ function enrichPostData(filePath: string, matterResult: matter.GrayMatterFile<st
     frontmatter.updatedDate ||
     frontmatter["updated-date"] ||
     null;
+
   let publishTime: string | Date | null =
     frontmatter.publishTime ||
     frontmatter["publish-time"] ||
@@ -203,6 +200,8 @@ function enrichPostData(filePath: string, matterResult: matter.GrayMatterFile<st
 
   if (createTime === null) {
     createTime = new Date();
+  } else {
+    hasCreateTime = true;
   }
   if (updateTime === null) {
     updateTime = createTime;
@@ -225,6 +224,19 @@ function enrichPostData(filePath: string, matterResult: matter.GrayMatterFile<st
   let cover: string | null = null;
   if (frontmatter.cover && frontmatter.cover.startsWith("https://")) {
     cover = frontmatter.cover;
+  }
+
+  // 关于 publish / index 的处理
+  let published = !!frontmatter.publish || !!frontmatter.published || false;
+  let indexed = !!frontmatter.index || !!frontmatter.indexed || false;
+  if (hasPublishedTitle) {
+    published = true; // 自动发布
+  }
+  if (!hasCreateTime) {
+    published = false; // 如果没有createTime，则不发布
+  }
+  if (!indexed && published) {
+    indexed = published;
   }
 
   return {
