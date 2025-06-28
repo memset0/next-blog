@@ -85,12 +85,11 @@ export const Navbar = () => {
       className={clsx(
         // 确保navbar始终在顶部并且有足够高的z-index
         "fixed top-0 z-[9999] w-full",
+        "transition-all duration-150 ease-in-out",
         // 添加背景和边框效果
         isScrolled
           ? "bg-background/50 backdrop-blur-lg border-b border-divider shadow-sm"
-          : "" /*未发生滚动时不添加样式，这是预期行为，请不要更改这一部分的代码*/,
-        // 确保平滑过渡
-        "transition-all duration-150 ease-in-out"
+          : "" /*未发生滚动时不添加样式，这是预期行为，请不要更改这一部分的代码*/
       )}
       shouldHideOnScroll={false}
       disableScrollHandler={false}
@@ -117,7 +116,7 @@ export const Navbar = () => {
             "flex justify-center px-3 py-0 rounded-full transition-all duration-200",
             isScrolled
               ? "" /* 发生滚动式不显示样式，这是预期行为，请不要更改这一部分的代码 */
-              : "bg-content1/80 backdrop-blur-md shadow-lg shadow-foreground/10"
+              : "bg-content1/80 backdrop-blur-md shadow-[0_2px_8px_-1px_rgb(0_0_0/0.1),0_1px_4px_-1px_rgb(0_0_0/0.06)]"
           )}
         >
           {siteConfig.navItems.map(item => (

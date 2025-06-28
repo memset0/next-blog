@@ -30,6 +30,8 @@ export type PostFields = {
   title: string;
   publishedTitle: string;
 
+  description: string;
+
   tags: string[];
 
   createTime: number;
@@ -123,7 +125,7 @@ function enrichPostData(filePath: string, matterResult: matter.GrayMatterFile<st
 
   // 过滤 frontmatter 中的所有元素，确保全部可序列化（如果是 Date 需要转换成字符串）
   const filteredFrontmatter = Object.fromEntries(
-    Object.entries(frontmatter).filter(([key, value]) => {
+    Object.entries(frontmatter).map(([key, value]) => {
       if (value instanceof Date) {
         return [key, value.toISOString()];
       }
@@ -133,6 +135,15 @@ function enrichPostData(filePath: string, matterResult: matter.GrayMatterFile<st
 
   // 关于 title 的处理
   let title = frontmatter.title || "Untitled Post";
+
+  // 关于 description 的处理
+  let description: string;
+  const splitedContent = matterResult.content.split("<!-- more -->");
+  if (splitedContent.length >= 2) {
+    description = splitedContent[0];
+  } else {
+    description = matterResult.content.slice(0, 200);
+  }
 
   // 关于 publish / index 以及 publishedTitle 的处理
   let publishedTitle: string | null =
@@ -162,11 +173,33 @@ function enrichPostData(filePath: string, matterResult: matter.GrayMatterFile<st
     frontmatter.date ||
     frontmatter.createTime ||
     frontmatter["create-time"] ||
+    frontmatter.createdTime ||
+    frontmatter["created-time"] ||
     frontmatter.createDate ||
     frontmatter["create-date"] ||
+    frontmatter.createdDate ||
+    frontmatter["created-date"] ||
     null;
-  let updateTime: string | Date | null = null;
-  let publishTime: string | Date | null = null;
+  let updateTime: string | Date | null =
+    frontmatter.updateTime ||
+    frontmatter["update-time"] ||
+    frontmatter.updateDate ||
+    frontmatter["update-date"] ||
+    frontmatter.updatedTime ||
+    frontmatter["updated-time"] ||
+    frontmatter.updatedDate ||
+    frontmatter["updated-date"] ||
+    null;
+  let publishTime: string | Date | null =
+    frontmatter.publishTime ||
+    frontmatter["publish-time"] ||
+    frontmatter.publishDate ||
+    frontmatter["publish-date"] ||
+    frontmatter.publishedTime ||
+    frontmatter["published-time"] ||
+    frontmatter.publishedDate ||
+    frontmatter["published-date"] ||
+    null;
 
   if (createTime === null) {
     createTime = new Date();
@@ -197,7 +230,7 @@ function enrichPostData(filePath: string, matterResult: matter.GrayMatterFile<st
   return {
     // 将原始的 front-matter 数据展开，确保 date 是字符串
     id: slug,
-    frontmatter: {},
+    frontmatter: filteredFrontmatter,
     // 创建我们自定义的 fields 对象
     fields: {
       slug,
@@ -207,6 +240,7 @@ function enrichPostData(filePath: string, matterResult: matter.GrayMatterFile<st
       indexed,
       title,
       publishedTitle,
+      description,
       tags,
       createTime: convertToTimestamp(createTime),
       updateTime: convertToTimestamp(updateTime),
